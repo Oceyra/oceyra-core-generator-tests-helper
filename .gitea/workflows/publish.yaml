@@ -19,4 +19,4 @@ jobs:
         run: dotnet pack src/Oceyra.Core.Generator.Tests.Helper/Oceyra.Core.Generator.Tests.Helper.csproj --configuration Release --output out  
 
       - name: Push generated package to Gitea registry
-        run: dotnet nuget push ./out/*.nupkg --source https://gitea.duchaine.freeddns.org/api/packages/ManufacturingTide/nuget/index.json --skip-duplicate --no-symbols true
+        run: dotnet nuget push ./out/*.nupkg --source ${{nuget_api_url}} --skip-duplicate --no-symbols true ${{nuget_api_key}}
