@@ -1,0 +1,8 @@
+﻿
+<Solution>
+  <Folder Name="/Common Files/">
+    <File Path="Common Files/global.json" />
+  </Folder>
+
+  <Project Path="Oceyra.Core.Generator.Tests.Helper\Oceyra.Core.Generator.Tests.Helper.csproj" />
+</Solution>
