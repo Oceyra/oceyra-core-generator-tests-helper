@@ -6,7 +6,7 @@ on:
 
 env:
   project: Oceyra.Core.Generator.Tests.Helper
-  path_to_project: src/$project/$project.csproj
+  path_to_project: src/${{ project }}/${{ project }}.csproj
 
 jobs:
   publish:
