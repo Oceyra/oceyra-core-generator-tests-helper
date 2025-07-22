@@ -3,15 +3,16 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace Oceyra.Core.Generator.Tests.Helper;
 
-internal static class SourceGeneratorVerifier
+public static class SourceGeneratorVerifier
 {
-    internal static GeneratorTestResult CompileAndTest<T>(params string[] sources) where T : IIncrementalGenerator, new()
+    public static GeneratorTestResult CompileAndTest<T>(params string[] sources) where T : IIncrementalGenerator, new()
     {
         var syntaxTrees = sources.Select(source => CSharpSyntaxTree.ParseText(source)).ToArray();
 
         return CompileAndTest<T>(syntaxTrees: syntaxTrees);
     }
-    internal static GeneratorTestResult CompileAndTest<T>(AdditionalText[]? additionalTexts = null, params SyntaxTree[] syntaxTrees) where T : IIncrementalGenerator, new()
+
+    public static GeneratorTestResult CompileAndTest<T>(AdditionalText[]? additionalTexts = null, params SyntaxTree[] syntaxTrees) where T : IIncrementalGenerator, new()
     {
         var references = new List<MetadataReference>();
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
