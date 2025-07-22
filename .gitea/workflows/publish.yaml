@@ -5,8 +5,7 @@ on:
       - main # Default release branch, may also be named 'master' or 'develop'
 
 env:
-  project: Oceyra.Core.Generator.Tests.Helper
-  path_to_project: src/${{ project }}/${{ project }}.csproj
+  path_to_project: src/Oceyra.Core.Generator.Tests.Helper/Oceyra.Core.Generator.Tests.Helper.csproj
 
 jobs:
   publish:
