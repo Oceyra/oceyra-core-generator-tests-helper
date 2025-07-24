@@ -6,15 +6,26 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Oceyra.Core.Generator.Tests.Helper</PackageId>
-    <Version>0.2.0</Version>
     <Authors>Pier-Luc Duchaine</Authors>
     <Company>Oceyra</Company>
     <Product>Oceyra Core Generator Tests Helper</Product>
     <Description>Test class for source generator that run the source generator on a given source file.</Description>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://gitea.duchaine.freeddns.org/ManufacturingTyde/oceyra-core-generator-tests-helper</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\Common Files\global.json" Link="global.json" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
