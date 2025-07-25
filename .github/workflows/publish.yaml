@@ -17,10 +17,15 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 9.x
 
       - name: Build solution and generate NuGet package
         run: dotnet pack $path_to_project -p:Version=0.2.${{ github.run_number }} --configuration Release --output bin  
 
+      - name: Push generated package to Local registry
+        if: ${{ vars.nuget_api_url != '' }}
+        run: dotnet nuget push bin/*.nupkg --source ${{ vars.nuget_api_url }} --skip-duplicate --no-symbols --api-key ${{ secrets.nuget_api_key }}
+
       - name: Push generated package to Nuget registry
-        run: dotnet nuget push ./bin/*.nupkg --source ${{ vars.nuget_api_url }} --skip-duplicate --no-symbols --api-key ${{ secrets.nuget_api_key }}
+        if: ${{ vars.nuget_api_url == '' }}
+        run: dotnet nuget push bin/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols --api-key ${{ secrets.nuget_api_key }}
