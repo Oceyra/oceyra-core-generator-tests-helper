@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main # Default release branch, may also be named 'master' or 'develop'
+    paths:
+      - '**.cs*'
 
 env:
   path_to_project: src/Oceyra.Core.Generator.Tests.Helper/Oceyra.Core.Generator.Tests.Helper.csproj
@@ -24,7 +26,7 @@ jobs:
 
       - name: Push generated package to Local registry
         if: ${{ vars.nuget_api_url != '' }}
-        run: dotnet nuget push bin/*.nupkg --source ${{ vars.nuget_api_url }} --skip-duplicate --no-symbols --api-key ${{ secrets.nuget_api_key }}
+        run: dotnet nuget push bin/*.nupkg --source ${{ vars.nuget_api_url }} --skip-duplicate --no-symbols --api-key ${{ secrets.nuget_api_key }} --version-suffix Beta
 
       - name: Push generated package to Nuget registry
         if: ${{ vars.nuget_api_url == '' }}
