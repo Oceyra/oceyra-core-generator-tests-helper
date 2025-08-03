@@ -12,7 +12,7 @@
     <Description>Test class for source generator that run the source generator on a given source file.</Description>
     <NuGetAuditMode>all</NuGetAuditMode>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://gitea.duchaine.freeddns.org/ManufacturingTyde/oceyra-core-generator-tests-helper</RepositoryUrl>
+    <RepositoryUrl>https://github.com/oceyra/oceyra-core-generator-tests-helper</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
