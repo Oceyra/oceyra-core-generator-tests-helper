@@ -6,43 +6,25 @@ using System.Reflection;
 
 namespace Oceyra.Core.Generator.Tests.Helper;
 
-public class GeneratorTestResult
+public class GeneratorTestResult(CSharpCompilation inputCompilation, Compilation outputCompilation, ImmutableArray<Diagnostic> generatorDiagnostics, GeneratorDriver generatorDriver)
 {
-    public CSharpCompilation InputCompilation { get; }
-    public Compilation OutputCompilation { get; }
-    public ImmutableArray<Diagnostic> GeneratorDiagnostics { get; }
-    public ImmutableArray<Diagnostic> CompilationDiagnostics { get; }
-    public GeneratorDriver GeneratorDriver { get; }
-    public GeneratorDriverTimingInfo TimingInfo { get; }
+    public CSharpCompilation InputCompilation { get; } = inputCompilation;
+    public Compilation OutputCompilation { get; } = outputCompilation;
+    public ImmutableArray<Diagnostic> GeneratorDiagnostics { get; } = generatorDiagnostics;
+    public GeneratorDriver GeneratorDriver { get; } = generatorDriver;
     public Assembly? CompiledAssembly { get; private set; } = null;
-
-    public GeneratorTestResult(
-        CSharpCompilation inputCompilation,
-        Compilation outputCompilation,
-        ImmutableArray<Diagnostic> generatorDiagnostics,
-        ImmutableArray<Diagnostic> compilationDiagnostics,
-        GeneratorDriver generatorDriver,
-        GeneratorDriverTimingInfo timingInfo)
-    {
-        InputCompilation = inputCompilation;
-        OutputCompilation = outputCompilation;
-        GeneratorDiagnostics = generatorDiagnostics;
-        CompilationDiagnostics = compilationDiagnostics;
-        GeneratorDriver = generatorDriver;
-        TimingInfo = timingInfo;
-    }
 
     // Helper methods for common assertions
     public GeneratorTestResult ShouldHaveNoErrors()
     {
-        var errors = CompilationDiagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+        var errors = OutputCompilation.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
         errors.ShouldBeEmpty($"Compilation failed with errors: {string.Join(", ", errors.Select(e => e.GetMessage()))}");
         return this;
     }
 
     public GeneratorTestResult ShouldHaveError(string diagnosticId)
     {
-        var error = CompilationDiagnostics.FirstOrDefault(d => d.Id == diagnosticId);
+        var error = OutputCompilation.GetDiagnostics().FirstOrDefault(d => d.Id == diagnosticId);
         error.ShouldNotBeNull($"Expected diagnostic {diagnosticId} was not found");
         return this;
     }
@@ -56,7 +38,7 @@ public class GeneratorTestResult
 
     public GeneratorTestResult ShouldExecuteWithin(TimeSpan maxTime)
     {
-        var totalTime = TimingInfo.ElapsedTime;
+        var totalTime = GeneratorDriver.GetTimingInfo().ElapsedTime;
         totalTime.ShouldBeLessThan(maxTime, $"Generator took {totalTime.TotalMilliseconds}ms, expected less than {maxTime.TotalMilliseconds}ms");
         return this;
     }
@@ -65,7 +47,7 @@ public class GeneratorTestResult
     public GeneratorTestResult ShouldHaveGeneratorTimeWithin<T>(TimeSpan maxTime) where T : IIncrementalGenerator
     {
         var generatorName = typeof(T).Name;
-        var generatorTiming = TimingInfo.GeneratorTimes.FirstOrDefault(gt => gt.Generator.GetType().Name == generatorName);
+        var generatorTiming = GeneratorDriver.GetTimingInfo().GeneratorTimes.FirstOrDefault(gt => gt.Generator.GetType().Name == generatorName);
 
         generatorTiming.ElapsedTime.ShouldBeLessThan(maxTime,
             $"Generator {generatorName} took {generatorTiming.ElapsedTime.TotalMilliseconds}ms, expected less than {maxTime.TotalMilliseconds}ms");

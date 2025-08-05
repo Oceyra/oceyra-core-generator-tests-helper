@@ -31,7 +31,7 @@ public static class SourceGeneratorVerifier
 
         var generator = new T();
         GeneratorDriver driver = CSharpGeneratorDriver.Create(
-            generators: new [] { generator.AsSourceGenerator() }, // Explicitly pass as IEnumerable<ISourceGenerator>
+            generators: [generator.AsSourceGenerator()], // Explicitly pass as IEnumerable<ISourceGenerator>
             additionalTexts: additionalTexts,
             parseOptions: null,
             optionsProvider: null,
@@ -39,16 +39,10 @@ public static class SourceGeneratorVerifier
 
         driver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generateDiagnostics);
 
-        // Get detailed timing information from the driver
-        var timingInfo = driver.GetTimingInfo();
-        var compileDiagnostics = outputCompilation.GetDiagnostics();
-
         return new GeneratorTestResult(
             inputCompilation: compilation,
             outputCompilation: outputCompilation,
             generatorDiagnostics: generateDiagnostics,
-            compilationDiagnostics: compileDiagnostics,
-            generatorDriver: driver,
-            timingInfo: timingInfo);
+            generatorDriver: driver);
     }
 }
